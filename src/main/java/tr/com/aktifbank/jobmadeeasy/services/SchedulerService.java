@@ -1,9 +1,7 @@
 package tr.com.aktifbank.jobmadeeasy.services;
 
-import org.quartz.JobDetail;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.Trigger;
+import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,11 @@ import tr.com.aktifbank.jobmadeeasy.util.TimerUtil;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Timer;
+import java.util.stream.Collectors;
 
 @Service
 public class SchedulerService {
@@ -35,6 +38,27 @@ public class SchedulerService {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public List<TimerProps> getAllRunningJobs() throws SchedulerException {
+        return scheduler.getJobKeys(GroupMatcher.anyGroup()).stream()
+                .map(jobKey -> {
+                    try {
+                        JobDetail detail = scheduler.getJobDetail(jobKey);
+                        return (TimerProps) detail.getJobDataMap().get(jobKey.getName());
+                    }
+                    catch (Exception e) {
+                        logger.error(e.getMessage());
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
+
+    public TimerProps getJobById(String jobId) throws SchedulerException {
+        final JobDetail jobDetail = scheduler.getJobDetail(new JobKey(jobId));
+        return (TimerProps) jobDetail.getJobDataMap().get(jobId);
     }
 
     @PostConstruct
