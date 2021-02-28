@@ -13,8 +13,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.Timer;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +36,15 @@ public class SchedulerService {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    public void updateTimer(final String timerId, TimerProps props) throws SchedulerException {
+        final JobDetail jobDetail = scheduler.getJobDetail(new JobKey(timerId));
+        jobDetail.getJobDataMap().put(timerId, props);
+    }
+
+    public void deleteTimer(String timerId) throws SchedulerException {
+        scheduler.deleteJob(new JobKey(timerId));
     }
 
     public List<TimerProps> getAllRunningJobs() throws SchedulerException {
@@ -65,6 +72,7 @@ public class SchedulerService {
     public void init() {
         try {
             scheduler.start();
+            scheduler.getListenerManager().addTriggerListener(new JMETriggerListener(this));
         }
         catch (SchedulerException e) {
             logger.info(e.getMessage());

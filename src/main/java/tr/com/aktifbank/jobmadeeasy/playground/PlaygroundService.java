@@ -26,11 +26,16 @@ public class PlaygroundService {
                 .initialOffsetMs(1000)
                 .printIntervalMs(2000)
                 .build();
+        timerProps.setRemainingFireCount(timerProps.getTotalFireCount());
         scheduler.Schedule(HelloWorldJob.class, timerProps);
     }
 
     public List<TimerProps> getAllJobs() throws SchedulerException {
         return scheduler.getAllRunningJobs();
+    }
+
+    public void deleteTimer(String timerId) throws SchedulerException{
+        scheduler.deleteTimer(timerId);
     }
 
     public TimerProps getJobById(String jobId) throws SchedulerException {
