@@ -1,2 +1,2 @@
 # jobs-made-easy
-Jobs, Quartz, Spring Boot and Vue
+Jobs, Quartz, Spring Boot
