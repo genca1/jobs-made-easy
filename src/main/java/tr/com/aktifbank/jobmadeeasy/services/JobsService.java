@@ -1,21 +1,19 @@
-package tr.com.aktifbank.jobmadeeasy.playground;
+package tr.com.aktifbank.jobmadeeasy.services;
 
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.com.aktifbank.jobmadeeasy.jobs.CallTheRestJob;
 import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
-import tr.com.aktifbank.jobmadeeasy.services.SchedulerService;
-
 import java.util.List;
 
 @Service
-public class PlaygroundService {
+public class JobsService {
 
     private final SchedulerService scheduler;
 
     @Autowired
-    private PlaygroundService(final SchedulerService scheduler){
+    private JobsService(final SchedulerService scheduler){
         this.scheduler = scheduler;
     }
 
