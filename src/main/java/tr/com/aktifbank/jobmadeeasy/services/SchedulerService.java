@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.com.aktifbank.jobmadeeasy.props.TimerProps;
+import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 import tr.com.aktifbank.jobmadeeasy.util.TimerUtil;
 
 import javax.annotation.PostConstruct;
@@ -27,7 +27,7 @@ public class SchedulerService {
         this.scheduler = scheduler;
     }
 
-    public void Schedule(Class jobClass, TimerProps props){
+    public void Schedule(Class jobClass, TimerProperties props){
         final JobDetail jobDetail = TimerUtil.jobDetail(jobClass, props);
         final Trigger jobTrigger = TimerUtil.jobTrigger(jobClass, props);
 
@@ -38,7 +38,7 @@ public class SchedulerService {
         }
     }
 
-    public void updateTimer(final String timerId, TimerProps props) throws SchedulerException {
+    public void updateTimer(final String timerId, TimerProperties props) throws SchedulerException {
         final JobDetail jobDetail = scheduler.getJobDetail(new JobKey(timerId));
         jobDetail.getJobDataMap().put(timerId, props);
     }
@@ -47,12 +47,12 @@ public class SchedulerService {
         scheduler.deleteJob(new JobKey(timerId));
     }
 
-    public List<TimerProps> getAllRunningJobs() throws SchedulerException {
+    public List<TimerProperties> getAllRunningJobs() throws SchedulerException {
         return scheduler.getJobKeys(GroupMatcher.anyGroup()).stream()
                 .map(jobKey -> {
                     try {
                         JobDetail detail = scheduler.getJobDetail(jobKey);
-                        return (TimerProps) detail.getJobDataMap().get(jobKey.getName());
+                        return (TimerProperties) detail.getJobDataMap().get(jobKey.getName());
                     }
                     catch (Exception e) {
                         logger.error(e.getMessage());
@@ -63,9 +63,9 @@ public class SchedulerService {
                 .collect(Collectors.toList());
     }
 
-    public TimerProps getJobById(String jobId) throws SchedulerException {
+    public TimerProperties getJobById(String jobId) throws SchedulerException {
         final JobDetail jobDetail = scheduler.getJobDetail(new JobKey(jobId));
-        return (TimerProps) jobDetail.getJobDataMap().get(jobId);
+        return (TimerProperties) jobDetail.getJobDataMap().get(jobId);
     }
 
     @PostConstruct

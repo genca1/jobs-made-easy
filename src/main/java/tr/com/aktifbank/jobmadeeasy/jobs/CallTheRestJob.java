@@ -3,21 +3,20 @@ package tr.com.aktifbank.jobmadeeasy.jobs;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import tr.com.aktifbank.jobmadeeasy.props.TimerProps;
+import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 
 
 @Component
-public class HelloWorldJob implements Job {
+public class CallTheRestJob implements Job {
 
-    private static final Logger logger = LoggerFactory.getLogger(HelloWorldJob.class);
+    private static final Logger logger = LoggerFactory.getLogger(CallTheRestJob.class);
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
         JobDataMap map = jobExecutionContext.getJobDetail().getJobDataMap();
-        TimerProps timerProps = (TimerProps) map.get(HelloWorldJob.class.getSimpleName());
-        logger.info(timerProps.getCallbackData());
+        TimerProperties timerProperties = (TimerProperties) map.get(CallTheRestJob.class.getSimpleName());
+        logger.info(timerProperties.getCallbackData());
     }
 }

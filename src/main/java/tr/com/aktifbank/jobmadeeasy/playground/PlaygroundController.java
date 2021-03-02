@@ -3,7 +3,7 @@ package tr.com.aktifbank.jobmadeeasy.playground;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import tr.com.aktifbank.jobmadeeasy.props.TimerProps;
+import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 
 import java.util.List;
 
@@ -20,16 +20,16 @@ public class PlaygroundController {
 
     @PostMapping("/hello")
     public void runHelloWorldController(){
-        service.runHelloWorldJob();
+        service.runCallTheRestJob();
     }
 
     @GetMapping("/")
-    public List<TimerProps> getAllJobs() throws SchedulerException {
+    public List<TimerProperties> getAllJobs() throws SchedulerException {
         return service.getAllJobs();
     }
 
     @GetMapping("/{jobid}")
-    public TimerProps getJobById(@PathVariable String jobid) throws SchedulerException {
+    public TimerProperties getJobById(@PathVariable String jobid) throws SchedulerException {
         return service.getJobById(jobid);
     }
 

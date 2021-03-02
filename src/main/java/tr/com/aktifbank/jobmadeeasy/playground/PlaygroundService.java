@@ -3,8 +3,8 @@ package tr.com.aktifbank.jobmadeeasy.playground;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tr.com.aktifbank.jobmadeeasy.jobs.HelloWorldJob;
-import tr.com.aktifbank.jobmadeeasy.props.TimerProps;
+import tr.com.aktifbank.jobmadeeasy.jobs.CallTheRestJob;
+import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 import tr.com.aktifbank.jobmadeeasy.services.SchedulerService;
 
 import java.util.List;
@@ -19,18 +19,18 @@ public class PlaygroundService {
         this.scheduler = scheduler;
     }
 
-    public void runHelloWorldJob() {
-        TimerProps timerProps = TimerProps.builder()
+    public void runCallTheRestJob() {
+        TimerProperties timerProperties = TimerProperties.builder()
                 .callbackData("My callback data")
                 .totalFireCount(25)
                 .initialOffsetMs(1000)
                 .printIntervalMs(2000)
                 .build();
-        timerProps.setRemainingFireCount(timerProps.getTotalFireCount());
-        scheduler.Schedule(HelloWorldJob.class, timerProps);
+        timerProperties.setRemainingFireCount(timerProperties.getTotalFireCount());
+        scheduler.Schedule(CallTheRestJob.class, timerProperties);
     }
 
-    public List<TimerProps> getAllJobs() throws SchedulerException {
+    public List<TimerProperties> getAllJobs() throws SchedulerException {
         return scheduler.getAllRunningJobs();
     }
 
@@ -38,7 +38,7 @@ public class PlaygroundService {
         scheduler.deleteTimer(timerId);
     }
 
-    public TimerProps getJobById(String jobId) throws SchedulerException {
+    public TimerProperties getJobById(String jobId) throws SchedulerException {
         return scheduler.getJobById(jobId);
     }
 }
