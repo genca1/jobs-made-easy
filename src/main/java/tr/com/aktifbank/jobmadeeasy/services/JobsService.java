@@ -1,21 +1,17 @@
 package tr.com.aktifbank.jobmadeeasy.services;
 
+import lombok.RequiredArgsConstructor;
 import org.quartz.SchedulerException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tr.com.aktifbank.jobmadeeasy.jobs.CallTheRestJob;
 import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class JobsService {
 
-    private final SchedulerService scheduler;
-
-    @Autowired
-    private JobsService(final SchedulerService scheduler){
-        this.scheduler = scheduler;
-    }
+    private final SchedulerService schedulerService;
 
     public void runCallTheRestJob() {
         TimerProperties timerProperties = TimerProperties.builder()
@@ -25,18 +21,18 @@ public class JobsService {
                 .printIntervalMs(2000)
                 .build();
         timerProperties.setRemainingFireCount(timerProperties.getTotalFireCount());
-        scheduler.Schedule(CallTheRestJob.class, timerProperties);
+        schedulerService.Schedule(CallTheRestJob.class, timerProperties);
     }
 
     public List<TimerProperties> getAllJobs() throws SchedulerException {
-        return scheduler.getAllRunningJobs();
+        return schedulerService.getAllRunningJobs();
     }
 
     public void deleteTimer(String timerId) throws SchedulerException{
-        scheduler.deleteTimer(timerId);
+        schedulerService.deleteTimer(timerId);
     }
 
     public TimerProperties getJobById(String jobId) throws SchedulerException {
-        return scheduler.getJobById(jobId);
+        return schedulerService.getJobById(jobId);
     }
 }
