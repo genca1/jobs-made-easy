@@ -23,7 +23,7 @@ public class SchedulerService {
 
     private final Scheduler scheduler;
 
-    public void Schedule(Class jobClass, TimerProperties props){
+    public void Schedule(Class<?> jobClass, TimerProperties props){
         final JobDetail jobDetail = TimerUtil.jobDetail(jobClass, props);
         final Trigger jobTrigger = TimerUtil.jobTrigger(jobClass, props);
 
