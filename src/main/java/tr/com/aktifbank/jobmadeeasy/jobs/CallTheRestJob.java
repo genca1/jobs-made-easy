@@ -2,6 +2,7 @@ package tr.com.aktifbank.jobmadeeasy.jobs;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.request.SendMessage;
+import lombok.RequiredArgsConstructor;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -10,10 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import tr.com.aktifbank.jobmadeeasy.model.TimerProperties;
 
-
 @Component
+@RequiredArgsConstructor
 public class CallTheRestJob implements Job {
 
+    private final String url;
     private static final Logger logger = LoggerFactory.getLogger(CallTheRestJob.class);
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {

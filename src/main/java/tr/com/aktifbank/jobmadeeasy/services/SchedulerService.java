@@ -3,6 +3,8 @@ package tr.com.aktifbank.jobmadeeasy.services;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.spi.JobFactory;
+import org.quartz.spi.TriggerFiredBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -62,6 +64,15 @@ public class SchedulerService {
     public TimerProperties getJobById(String jobId) throws SchedulerException {
         final JobDetail jobDetail = scheduler.getJobDetail(new JobKey(jobId));
         return (TimerProperties) jobDetail.getJobDataMap().get(jobId);
+    }
+
+    public void createJob(String url, TimerProperties timerProperties) {
+        JobFactory jobFactory = new JobFactory() {
+            @Override
+            public Job newJob(TriggerFiredBundle triggerFiredBundle, Scheduler scheduler) throws SchedulerException {
+                return null;
+            }
+        }
     }
 
     @PostConstruct
